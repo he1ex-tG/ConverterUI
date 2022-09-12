@@ -1,11 +1,11 @@
-package com.he1extg.ConverterUI
+package com.he1extg.converterui
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class Application
+class ConverterUIApplication
 
 fun main(args: Array<String>) {
-	runApplication<Application>(*args)
+	runApplication<ConverterUIApplication>(*args)
 }

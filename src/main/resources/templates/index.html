@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="en" xmlns:th="http://www.thymeleaf.org"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="PDF to MP3CONVERTER">
+    <meta name="description" content="">
+    <title>Converter</title>
+    <link rel="stylesheet" th:href="@{/css/nicepage.css}" media="screen">
+    <link rel="stylesheet" th:href="@{/css/Главная.css}" media="screen">
+    <script class="u-script" type="text/javascript" th:src="@{/js/jquery.js}" defer=""></script>
+    <script class="u-script" type="text/javascript" th:src="@{/js/nicepage.js}" defer=""></script>
+    <meta name="generator" content="Nicepage 4.15.8, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    
+    
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": ""
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Converter">
+    <meta property="og:type" content="website">
+  </head>
+  <body data-home-page="index.html" data-home-page-title="Converter" class="u-body u-xl-mode" data-lang="en">
+    <section class="u-clearfix u-image u-section-1" id="carousel_36cb" data-image-width="1869" data-image-height="1080">
+      <div class="u-clearfix u-sheet u-valign-bottom-lg u-valign-bottom-md u-valign-bottom-sm u-valign-bottom-xl u-sheet-1">
+        <div class="u-container-style u-group u-group-1">
+          <div class="u-container-layout u-valign-top u-container-layout-1">
+            <h1 class="u-align-center u-text u-text-body-alt-color u-text-1">PDF to MP3<br>
+            </h1>
+            <div class="u-form u-form-1">
+              <form action="/" method="POST" enctype="multipart/form-data" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form" name="form" style="padding: 10px;" redirect="true">
+                <div class="u-form-group u-form-group-1">
+                  <input type="file" name="file" placeholder="" id="text-906f" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                </div>
+                <div class="u-form-group u-form-select u-form-group-2">
+                  <label for="select-fab7" class="u-label">Language</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-fab7" name="language" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+                      <option value="En - male">En - male</option>
+                      <option value="En - female">En - female</option>
+                      <option value="Ru - male">Ru - male</option>
+                      <option value="Ru - female">Ru - female</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1.0" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-align-right u-form-group u-form-submit">
+                  <a href="#" class="u-border-2 u-border-custom-color-1 u-border-hover-custom-color-2 u-border-no-left u-border-no-right u-btn u-btn-round u-btn-submit u-button-style u-custom-color-2 u-hover-custom-color-1 u-radius-50 u-text-black u-btn-1 u-btn-letter-spacing">CONVERT</a>
+                  <input type="submit" value="submit" class="u-form-control-hidden">
+                </div>
+                <div class="u-form-send-message u-form-send-success"></div>
+                <div class="u-form-send-error u-form-send-message"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="u-container-style u-expanded-width u-group u-shape-rectangle u-group-2">
+          <div class="u-container-layout u-container-layout-2">
+            <ul class="ul-positioning">
+              <li th:each="file, stats : ${files}" class="list-style-none">
+                  <div class="u-clearfix u-gutter-0 u-layout-spacing-top-bottom u-layout-wrap u-layout-wrap-1">
+                      <div class="u-gutter-0 u-layout">
+                          <div class="u-layout-col">
+                              <div class="u-size-60">
+                                  <div class="u-layout-row">
+                                      <div class="u-container-style u-layout-cell u-shape-rectangle u-size-44 u-layout-cell-1">
+                                          <div class="u-container-layout u-valign-middle u-container-layout-3">
+                                              <p class="u-align-left u-text u-text-default u-text-2">[[${file.name}]]</p>
+                                          </div>
+                                      </div>
+                                      <div class="u-container-style u-layout-cell u-shape-rectangle u-size-6 u-layout-cell-2">
+                                          <div class="u-container-layout u-valign-middle u-container-layout-4">
+                                              <div class="parent-flex">
+                                                  <div class="child-flex">
+                                                      <audio th:id="player+${stats.index}" th:src="${file.dlURIString}"></audio>
+                                                      <a th:attr="onclick=|document.getElementById('player${stats.index}').play()|" class="u-align-center u-border-2 u-border-custom-color-1 u-border-hover-custom-color-2 u-border-no-left u-border-no-right u-btn u-btn-round u-button-style u-custom-color-2 u-hover-custom-color-1 u-radius-50 u-btn-2"><span class="u-file-icon u-icon"><img src="images/748134.png" alt=""></span>
+                                                      </a>
+                                                  </div>
+                                                      <div class="child-flex">
+                                                      <a th:attr="onclick=|document.getElementById('player${stats.index}').pause()|" class="u-align-center u-border-2 u-border-custom-color-1 u-border-hover-custom-color-2 u-border-no-left u-border-no-right u-btn u-btn-round u-button-style u-custom-color-2 u-hover-custom-color-1 u-radius-50 u-btn-2"><span class="u-file-icon u-icon"><img src="images/748136.png" alt=""></span>
+                                                      </a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="u-container-style u-layout-cell u-shape-rectangle u-size-10 u-layout-cell-3">
+                                          <div class="u-container-layout u-valign-middle u-container-layout-5">
+                                              <a th:href="${file.dlURIString}" class="u-border-2 u-border-custom-color-1 u-border-hover-custom-color-2 u-border-no-left u-border-no-right u-btn u-btn-round u-button-style u-custom-color-2 u-hover-custom-color-1 u-radius-50 u-btn-3">​&nbsp;download
+                                              </a>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="u-border-1 u-border-custom-color-1 u-expanded-width u-line u-line-horizontal u-line-1"></div>
+              </li>
+            </ul>
+          </div>
+        </div><span class="u-align-right u-file-icon u-icon u-icon-5" data-href="https://github.com/he1ex-tG/PDFReader" data-target="_blank"><img src="/images/733609.png" alt=""></span>
+      </div>
+    </section>
+
+    <section class="u-backlink u-clearfix u-grey-80">
+    </section>
+</body></html>

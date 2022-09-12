@@ -1,10 +1,10 @@
-package com.he1extg.ConverterUI
+package com.he1extg.converterui
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class ApplicationTests {
+class ConverterUIApplicationTests {
 
 	@Test
 	fun contextLoads() {

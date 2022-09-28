@@ -1,5 +1,7 @@
 package com.he1extg.converterui.controller
 
+import com.he1extg.converterui.service.ConverterService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
@@ -16,8 +18,13 @@ import org.springframework.web.multipart.MultipartFile
 @Controller
 class HttpController {
 
+    @Autowired
+    lateinit var converterService: ConverterService
+
     @GetMapping
     fun main(): String {
+        /** TEST */
+        converterService.getFileList()
         return "index"
     }
 
@@ -36,10 +43,7 @@ class HttpController {
     @PostMapping
     fun uploadFile(@RequestParam file: MultipartFile): String {
         if (!file.isEmpty) {
-            val requestEntity = RequestEntity.get("http://localhost:8082").build()
-            val restTemplate = RestTemplate()
-            val answer = restTemplate.exchange(requestEntity, String::class.java)
-            println("Answer: ${answer.body}")
+
         }
         return "redirect:/"
     }

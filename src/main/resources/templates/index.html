@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Converter: PDF to MP3 - UI</title>
 </head>
 <body>
     <h1>Converter: PDF to MP3 - UI</h1>
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
+    <form method="post" enctype="multipart/form-data" th:object="${converterFile}">
+        <input type="file" th:field="*{file}" th:value="${file}">
         <button>Submit</button>
     </form>
 </body>

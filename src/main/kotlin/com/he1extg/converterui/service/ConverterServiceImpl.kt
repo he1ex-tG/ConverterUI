@@ -1,8 +1,10 @@
 package com.he1extg.converterui.service
 
+import org.springframework.http.HttpHeaders
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.multipart.MultipartFile
 
@@ -24,9 +26,16 @@ class ConverterServiceImpl(
 
     @Suppress("UNCHECKED_CAST")
     private fun convertFile(file: MultipartFile): ByteArray? {
-        val requestEntity = RequestEntity.get(converterServiceConfiguration.uriApi).build()
+        val body = LinkedMultiValueMap<String, Any>().apply {
+            add("file", file)
+        }
+        val requestEntity = RequestEntity.post(converterServiceConfiguration.uriApi).apply {
+            body(body)
+        }.build()
         val restTemplate = RestTemplate()
         val answer = restTemplate.exchange(requestEntity, ResponseEntity::class.java)
+        println(answer.statusCode)
+        println(answer.body)
         return if (answer.statusCode.is2xxSuccessful) {
             answer.body as ByteArray
         } else {
@@ -42,8 +51,9 @@ class ConverterServiceImpl(
     }
 
     override fun processFile(file: MultipartFile): Boolean {
-        val convertResult = convertFile(file) ?: return false
-        return storeFile(user, file.name, convertResult)
+        /*val convertResult = convertFile(file) ?: return false
+        return storeFile(user, file.name, convertResult)*/
+        return convertFile(file) != null
     }
 
 }

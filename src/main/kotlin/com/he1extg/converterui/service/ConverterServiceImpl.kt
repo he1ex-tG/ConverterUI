@@ -1,6 +1,9 @@
 package com.he1extg.converterui.service
 
+import com.he1extg.converterui.model.ConverterFile
+import com.he1extg.converterui.model.TransferData
 import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -25,15 +28,14 @@ class ConverterServiceImpl(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun convertFile(file: MultipartFile): ByteArray? {
-        val body = LinkedMultiValueMap<String, Any>().apply {
-            add("file", file)
-        }
-        val requestEntity = RequestEntity.post(converterServiceConfiguration.uriApi).apply {
-            body(body)
-        }.build()
+    private fun convertFile(transferData: TransferData): ByteArray? {
+        val requestEntity = RequestEntity.post(converterServiceConfiguration.uriApi)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                transferData
+            )
         val restTemplate = RestTemplate()
-        val answer = restTemplate.exchange(requestEntity, ResponseEntity::class.java)
+        val answer = restTemplate.exchange(requestEntity, ByteArray::class.java)
         println(answer.statusCode)
         println(answer.body)
         return if (answer.statusCode.is2xxSuccessful) {
@@ -50,10 +52,10 @@ class ConverterServiceImpl(
         return answer.statusCode.is2xxSuccessful
     }
 
-    override fun processFile(file: MultipartFile): Boolean {
+    override fun processFile(converterFile: ConverterFile): Boolean {
         /*val convertResult = convertFile(file) ?: return false
         return storeFile(user, file.name, convertResult)*/
-        return convertFile(file) != null
+        return convertFile(converterFile.transferData) != null
     }
 
 }

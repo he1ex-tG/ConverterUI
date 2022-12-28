@@ -32,10 +32,8 @@ class ConvertFile {
         @ModelAttribute converterFile: ConverterFile,
         sessionStatus: SessionStatus
     ): String {
-        converterFile.file?.let {
-            println(converterService.processFile(it))
-            sessionStatus.setComplete()
-        }
+        converterService.processFile(converterFile)
+        sessionStatus.setComplete()
         return "index"
     }
 }

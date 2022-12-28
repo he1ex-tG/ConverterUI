@@ -4,4 +4,11 @@ import org.springframework.web.multipart.MultipartFile
 
 class ConverterFile {
     var file: MultipartFile? = null
+
+    val transferData: TransferData
+        get() {
+            return TransferDataImpl().apply {
+                content = file?.bytes
+            }
+        }
 }

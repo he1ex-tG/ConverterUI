@@ -2,14 +2,11 @@ package com.he1extg.converterui.service
 
 import com.he1extg.converterui.model.ConverterFile
 import com.he1extg.converterui.model.TransferData
-import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.multipart.MultipartFile
 
 @Service
 class ConverterServiceImpl(
@@ -37,7 +34,7 @@ class ConverterServiceImpl(
         val restTemplate = RestTemplate()
         val answer = restTemplate.exchange(requestEntity, ByteArray::class.java)
         println(answer.statusCode)
-        println(answer.body)
+        println(answer.body.contentToString())
         return if (answer.statusCode.is2xxSuccessful) {
             answer.body as ByteArray
         } else {
@@ -53,8 +50,6 @@ class ConverterServiceImpl(
     }
 
     override fun processFile(converterFile: ConverterFile): Boolean {
-        /*val convertResult = convertFile(file) ?: return false
-        return storeFile(user, file.name, convertResult)*/
         return convertFile(converterFile.transferData) != null
     }
 

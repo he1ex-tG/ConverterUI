@@ -7,7 +7,7 @@ class ConverterFile {
 
     val transferData: TransferData
         get() {
-            return TransferDataImpl().apply {
+            return TransferData().apply {
                 content = file?.bytes
             }
         }

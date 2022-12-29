@@ -24,7 +24,6 @@ class ConverterServiceImpl(
         return answer.body as List<String>
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun convertFile(transferData: TransferData): ByteArray? {
         val requestEntity = RequestEntity.post(converterServiceConfiguration.uriApi)
             .contentType(MediaType.APPLICATION_JSON)
@@ -32,12 +31,12 @@ class ConverterServiceImpl(
                 transferData
             )
         val restTemplate = RestTemplate()
-        val answer = restTemplate.exchange(requestEntity, ByteArray::class.java)
-        println(answer.statusCode)
-        println(answer.body.contentToString())
-        return if (answer.statusCode.is2xxSuccessful) {
-            answer.body as ByteArray
-        } else {
+        return try {
+            val answer = restTemplate.exchange(requestEntity, ByteArray::class.java)
+            answer.body
+        }
+        catch (e: Exception) {
+            println(e.message)
             null
         }
     }
@@ -50,7 +49,11 @@ class ConverterServiceImpl(
     }
 
     override fun processFile(converterFile: ConverterFile): Boolean {
-        return convertFile(converterFile.transferData) != null
+        val convertTransferData = TransferData().apply {
+            content = converterFile.file?.bytes
+        }
+        val convertedByteArray = convertFile(convertTransferData)
+        return convertedByteArray != null
     }
 
 }

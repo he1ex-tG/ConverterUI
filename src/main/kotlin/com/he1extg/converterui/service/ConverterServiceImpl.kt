@@ -1,7 +1,7 @@
 package com.he1extg.converterui.service
 
 import com.he1extg.converterui.model.ConverterFile
-import com.he1extg.converterui.model.TransferData
+import com.he1extg.converterui.dto.TransferData
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.http.ResponseEntity

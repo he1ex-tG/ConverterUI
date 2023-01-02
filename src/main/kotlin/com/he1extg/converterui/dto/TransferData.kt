@@ -1,4 +1,4 @@
-package com.he1extg.converterui.model
+package com.he1extg.converterui.dto
 
 class TransferData {
     var content: ByteArray? = null

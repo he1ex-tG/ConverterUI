@@ -31,4 +31,40 @@ class ConverterFileTest {
 
         assertThat(answer.statusCode).isEqualTo(HttpStatus.OK)
     }
+
+    /**
+     * Add error message handling
+     */
+    @Test
+    fun `upload incorrect file`() {
+        val requestEntity = RequestEntity.post("/")
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .body(
+                LinkedMultiValueMap<String, Any>().apply {
+                    add("file", FileSystemResource("E:/test.mp3"))
+                }
+            )
+
+        val answer = testRestTemplate.exchange(requestEntity, String::class.java)
+
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.OK)
+    }
+
+    /**
+     * Add error message handling
+     */
+    @Test
+    fun `upload empty file`() {
+        val requestEntity = RequestEntity.post("/")
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .body(
+                LinkedMultiValueMap<String, Any>().apply {
+                    add("file", null)
+                }
+            )
+
+        val answer = testRestTemplate.exchange(requestEntity, String::class.java)
+
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.OK)
+    }
 }

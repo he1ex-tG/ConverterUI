@@ -12,13 +12,24 @@ import org.springframework.mock.web.MockMultipartFile
 class ConverterServiceTest {
 
     @Autowired
-    lateinit var converterService: ConverterServiceImpl
+    lateinit var converterService: ConverterService
 
     @Test
     fun `convertFile with empty TransferData`() {
         val emptyConverterFile = ConverterFile()
 
         val result = converterService.processFile(emptyConverterFile)
+
+        assertThat(result).isFalse
+    }
+
+    @Test
+    fun `convertFile with incorrect pdf file TransferData`() {
+        val converterFile = ConverterFile().apply {
+            file = MockMultipartFile("test.mp3", FileSystemResource("E:/test.mp3").inputStream.readBytes())
+        }
+
+        val result = converterService.processFile(converterFile)
 
         assertThat(result).isFalse
     }

@@ -32,6 +32,9 @@ class ConvertFile {
         @ModelAttribute converterFile: ConverterFile,
         sessionStatus: SessionStatus
     ): String {
+        /**
+         * TODO File auto check
+         */
         converterService.processFile(converterFile)
         sessionStatus.setComplete()
         return "index"

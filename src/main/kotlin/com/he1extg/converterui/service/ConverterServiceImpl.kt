@@ -1,10 +1,11 @@
 package com.he1extg.converterui.service
 
+import com.he1extg.converterui.dto.FileUploadDTO
 import com.he1extg.converterui.model.ConverterFile
-import com.he1extg.converterui.dto.TransferData
+import com.he1extg.converterui.dto.FileConvertDTO
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
@@ -24,11 +25,12 @@ class ConverterServiceImpl(
         return answer.body as List<String>
     }
 
-    private fun convertFile(transferData: TransferData): ByteArray? {
+    private fun convertFile(fileContent: ByteArray): ByteArray? {
+        val fileConvertDTO = FileConvertDTO(fileContent)
         val requestEntity = RequestEntity.post(converterServiceConfiguration.uriApi)
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                transferData
+                fileConvertDTO
             )
         val restTemplate = RestTemplate()
         return try {
@@ -41,19 +43,29 @@ class ConverterServiceImpl(
         }
     }
 
-    private fun storeFile(userName: String, fileName: String, file: ByteArray): Boolean {
-        val requestEntity = RequestEntity.get(converterServiceConfiguration.uriData).build()
+    private fun storeFile(userName: String, fileName: String, fileContent: ByteArray): Boolean {
+        val fileUploadDTO = FileUploadDTO(fileContent, fileName, userName)
+        val requestEntity = RequestEntity.post(converterServiceConfiguration.uriData)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                fileUploadDTO
+            )
         val restTemplate = RestTemplate()
-        val answer = restTemplate.exchange(requestEntity, ResponseEntity::class.java)
-        return answer.statusCode.is2xxSuccessful
+        val answer = restTemplate.exchange(requestEntity, Unit::class.java)
+        return answer.statusCode == HttpStatus.OK
     }
 
     override fun processFile(converterFile: ConverterFile): Boolean {
-        val convertTransferData = TransferData().apply {
-            content = converterFile.file?.bytes
-        }
-        val convertedByteArray = convertFile(convertTransferData)
-        return convertedByteArray != null
+        val multipartFile = converterFile.file ?: return false
+
+        val convertResult = convertFile(multipartFile.bytes) ?: return false
+        val storeResult = storeFile(
+            user,
+            multipartFile.originalFilename ?: "defaultFilename",
+            convertResult
+        )
+
+        return storeResult
     }
 
 }

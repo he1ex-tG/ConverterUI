@@ -14,6 +14,9 @@ class ConverterServiceImpl(
     private val converterServiceConfiguration: ConverterServiceConfiguration,
 ): ConverterService {
 
+    /**
+     * TODO Get user from security authentication
+     */
     val user: String = "SuperUser"
 
     @Suppress("UNCHECKED_CAST")
@@ -25,6 +28,9 @@ class ConverterServiceImpl(
         return answer.body as List<String>
     }
 
+    /**
+     * TODO Add custom error handler (https://stackoverflow.com/questions/38093388/spring-resttemplate-exception-handling)
+     */
     private fun convertFile(fileContent: ByteArray): ByteArray? {
         val fileConvertDTO = FileConvertDTO(fileContent)
         val requestEntity = RequestEntity.post(converterServiceConfiguration.uriApi)
@@ -38,7 +44,6 @@ class ConverterServiceImpl(
             answer.body
         }
         catch (e: Exception) {
-            println(e.message)
             null
         }
     }
@@ -51,8 +56,13 @@ class ConverterServiceImpl(
                 fileUploadDTO
             )
         val restTemplate = RestTemplate()
-        val answer = restTemplate.exchange(requestEntity, Unit::class.java)
-        return answer.statusCode == HttpStatus.OK
+        return try {
+            val answer = restTemplate.exchange(requestEntity, Unit::class.java)
+            answer.statusCode == HttpStatus.OK
+        }
+        catch (e: Exception) {
+            false
+        }
     }
 
     override fun processFile(converterFile: ConverterFile): Boolean {
@@ -61,7 +71,7 @@ class ConverterServiceImpl(
         val convertResult = convertFile(multipartFile.bytes) ?: return false
         val storeResult = storeFile(
             user,
-            multipartFile.originalFilename ?: "defaultFilename",
+            multipartFile.name,
             convertResult
         )
 

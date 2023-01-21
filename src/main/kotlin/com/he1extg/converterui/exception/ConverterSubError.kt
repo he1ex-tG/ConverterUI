@@ -1,3 +1,3 @@
 package com.he1extg.converterui.exception
 
-abstract class ApiSubError
+abstract class ConverterSubError

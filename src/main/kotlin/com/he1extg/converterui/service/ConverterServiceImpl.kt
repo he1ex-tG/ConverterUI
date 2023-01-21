@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 @Service
-class ConverterServiceImpl(
-    private val converterServiceConfiguration: ConverterServiceConfiguration,
-): ConverterService {
+class ConverterServiceImpl : ConverterService {
 
     @Autowired
     lateinit var apiClient: ApiClient
@@ -29,7 +27,7 @@ class ConverterServiceImpl(
 
     @Suppress("UNCHECKED_CAST")
     override fun getFileList(): List<String> {
-        val requestEntity = RequestEntity.get(converterServiceConfiguration.uriData).build()
+        val requestEntity = RequestEntity.get("converterServiceConfiguration.uriData").build()
         val restTemplate = RestTemplate()
         val answer = restTemplate.exchange(requestEntity, List::class.java)
         println("Answer: ${answer.body}")
@@ -44,7 +42,7 @@ class ConverterServiceImpl(
 
     private fun storeFile(userName: String, fileName: String, fileContent: ByteArray): Boolean {
         val fileUploadDTO = FileUploadDTO(fileContent, fileName, userName)
-        val requestEntity = RequestEntity.post(converterServiceConfiguration.uriData)
+        val requestEntity = RequestEntity.post("converterServiceConfiguration.uriData")
             .contentType(MediaType.APPLICATION_JSON)
             .body(
                 fileUploadDTO

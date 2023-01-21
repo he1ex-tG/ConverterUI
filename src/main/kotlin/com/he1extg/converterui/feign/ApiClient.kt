@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping
 
 @FeignClient(
     name = "ApiClient",
-    url = "http://localhost:8082/api/v1/file",
+    url = "\${feign.client.api.uri}",
     configuration = [ApiClientConfiguration::class]
 )
 interface ApiClient {

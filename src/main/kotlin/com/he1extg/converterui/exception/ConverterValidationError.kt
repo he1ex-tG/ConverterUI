@@ -1,9 +1,9 @@
 package com.he1extg.converterui.exception
 
-class ApiValidationError(
+class ConverterValidationError(
     private val `object`: String,
     private val message: String,
-) : ApiSubError() {
+) : ConverterSubError() {
 
     private var field: String? = null
     private var rejectedValue: Any? = null

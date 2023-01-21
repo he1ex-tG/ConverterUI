@@ -3,10 +3,10 @@ package com.he1extg.converterui.service
 import com.he1extg.converterui.dto.FileUploadDTO
 import com.he1extg.converterui.model.ConverterFile
 import com.he1extg.converterui.dto.FileConvertDTO
+import com.he1extg.converterui.dto.IdFilenameDTO
 import com.he1extg.converterui.feign.ApiClient
+import com.he1extg.converterui.feign.DataClient
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
-import org.springframework.http.RequestEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
@@ -15,6 +15,8 @@ class ConverterServiceImpl : ConverterService {
 
     @Autowired
     lateinit var apiClient: ApiClient
+    @Autowired
+    lateinit var dataClient: DataClient
 
     /**
      * TODO Get user from security authentication
@@ -25,54 +27,26 @@ class ConverterServiceImpl : ConverterService {
         //errorHandler = MyResponseErrorHandler()
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getFileList(): List<String> {
-        val requestEntity = RequestEntity.get("converterServiceConfiguration.uriData").build()
-        val restTemplate = RestTemplate()
-        val answer = restTemplate.exchange(requestEntity, List::class.java)
-        println("Answer: ${answer.body}")
-        return answer.body as List<String>
+    override fun getFileList(): List<IdFilenameDTO> {
+        return dataClient.getFileList(user)
     }
 
     private fun convertFile(fileContent: ByteArray): ByteArray {
         val fileConvertDTO = FileConvertDTO(fileContent)
-        val answer = apiClient.convertFile(fileConvertDTO)
-        return answer.content
+        val answerApi = apiClient.convertFile(fileConvertDTO)
+        return answerApi.content
     }
 
-    private fun storeFile(userName: String, fileName: String, fileContent: ByteArray): Boolean {
+    private fun storeFile(userName: String, fileName: String, fileContent: ByteArray) {
         val fileUploadDTO = FileUploadDTO(fileContent, fileName, userName)
-        val requestEntity = RequestEntity.post("converterServiceConfiguration.uriData")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(
-                fileUploadDTO
-            )
-        return try {
-            val answer = restTemplate.exchange(requestEntity, Unit::class.java)
-            true
-        }
-        catch (e: Exception) {
-            false
-        }
+        dataClient.uploadFile(fileUploadDTO)
     }
 
-    override fun processFile(converterFile: ConverterFile): Boolean {
-        val multipartFile = converterFile.file ?: return false
-
-        //try {
-            val convertResult = convertFile(multipartFile.bytes) ?: return false
-        /*} catch (e: Exception) {
-            println(e.message)
-        }*/
-
-        /*val storeResult = storeFile(
-            user,
-            multipartFile.name,
-            convertResult
-        )
-
-        return storeResult*/
-        return true
+    override fun processFile(converterFile: ConverterFile) {
+        val multipartFile = converterFile.file ?: return // add validation on controller layer ?: return false
+        val convertResult = convertFile(multipartFile.bytes)
+        // Change file extension from pdf to mp3
+        val storeResult = storeFile(user, multipartFile.originalFilename ?: "filename", convertResult)
     }
 
 }

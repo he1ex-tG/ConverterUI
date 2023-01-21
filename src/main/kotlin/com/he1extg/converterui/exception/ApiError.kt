@@ -5,7 +5,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-class ConverterError(
+class ApiError(
     val status: HttpStatus,
     val message: String,
     val timestamp: String = DateTimeFormatter
@@ -13,7 +13,7 @@ class ConverterError(
         .withZone(ZoneOffset.UTC)
         .format(Instant.now()),
     val debugMessage: String = "",
-    val subErrors: List<ConverterSubError>? = null,
+    val subErrors: List<ApiSubError>? = null,
 ) {
     constructor(
         status: HttpStatus,

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.he1extg.converterui.exception.ApiClientException
-import com.he1extg.converterui.exception.ConverterError
+import com.he1extg.converterui.exception.ApiError
 import feign.codec.ErrorDecoder
 import org.springframework.context.annotation.Bean
 
@@ -23,8 +23,8 @@ class ApiClientConfiguration {
                     .configure(KotlinFeature.StrictNullChecks, false)
                     .build()
             )
-            val converterError = mapper.readValue(response.body().asInputStream(), ConverterError::class.java)
-            ApiClientException(converterError.debugMessage)
+            val apiError = mapper.readValue(response.body().asInputStream(), ApiError::class.java)
+            ApiClientException(apiError.debugMessage)
         }
     }
 }

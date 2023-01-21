@@ -19,7 +19,11 @@ class ConvertFile {
 
     @ModelAttribute(name = "converterFile")
     fun converterFile(): ConverterFile {
-        return ConverterFile()
+        val converterFile = ConverterFile()
+        converterFile.apply {
+            storedFiles = converterService.getFileList()
+        }
+        return converterFile
     }
 
     @GetMapping

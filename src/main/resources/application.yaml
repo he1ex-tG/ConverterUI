@@ -5,6 +5,9 @@ spring:
       - secrets
 server:
   port: 8080
-converter:
-  uri-api: http://localhost:8082/api/v1/file
-  uri-data: http://localhost:8081/api/v1/files
+feign:
+  client:
+    api:
+      uri: http://localhost:8082/api/v1/file
+    data:
+      data: http://localhost:8081/api/v1/files

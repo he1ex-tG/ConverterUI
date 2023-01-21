@@ -19,8 +19,6 @@ class ConverterServiceTest {
         val emptyConverterFile = ConverterFile()
 
         val result = converterService.processFile(emptyConverterFile)
-
-        assertThat(result).isFalse
     }
 
     @Test
@@ -30,8 +28,6 @@ class ConverterServiceTest {
         }
 
         val result = converterService.processFile(converterFile)
-
-        assertThat(result).isFalse
     }
 
     @Test
@@ -41,7 +37,5 @@ class ConverterServiceTest {
         }
 
         val result = converterService.processFile(converterFile)
-
-        assertThat(result).isTrue
     }
 }

@@ -3,6 +3,7 @@ package com.he1extg.converterui.service
 import com.he1extg.converterui.dto.FileUploadDTO
 import com.he1extg.converterui.model.ConverterFile
 import com.he1extg.converterui.dto.FileConvertDTO
+import com.he1extg.converterui.dto.FilenameBytearrayDTO
 import com.he1extg.converterui.dto.IdFilenameDTO
 import com.he1extg.converterui.feign.ApiClient
 import com.he1extg.converterui.feign.DataClient
@@ -23,10 +24,6 @@ class ConverterServiceImpl : ConverterService {
      */
     val user: String = "SuperUser"
 
-    val restTemplate: RestTemplate = RestTemplate().apply {
-        //errorHandler = MyResponseErrorHandler()
-    }
-
     override fun getFileList(): List<IdFilenameDTO> {
         return dataClient.getFileList(user)
     }
@@ -45,8 +42,15 @@ class ConverterServiceImpl : ConverterService {
     override fun processFile(converterFile: ConverterFile) {
         val multipartFile = converterFile.file ?: return // add validation on controller layer ?: return false
         val convertResult = convertFile(multipartFile.bytes)
-        // Change file extension from pdf to mp3
-        val storeResult = storeFile(user, multipartFile.originalFilename ?: "filename", convertResult)
+
+        /** Change file extension from PDF to MP3 */
+        val newFilename = (multipartFile.originalFilename?.substringBeforeLast('.') ?: "filename") + ".mp3"
+
+        val storeResult = storeFile(user, newFilename, convertResult)
+    }
+
+    override fun downloadFile(id: Long): FilenameBytearrayDTO {
+        return dataClient.downloadFile(id)
     }
 
 }

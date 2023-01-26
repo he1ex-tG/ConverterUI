@@ -9,6 +9,7 @@ import com.he1extg.converterui.feign.ApiClient
 import com.he1extg.converterui.feign.DataClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class ConverterServiceImpl : ConverterService {
@@ -35,15 +36,13 @@ class ConverterServiceImpl : ConverterService {
         dataClient.uploadFile(fileUploadDTO())
     }
 
-    override fun processFile(converterFile: ConverterFile) {
-        val multipartFile = converterFile.file ?: return // add validation on controller layer ?: return false
+    override fun processFile(converterFile: () -> FilenameBytearrayDTO) {
         val convertResult = convertFile {
-            FileConvertDTO(multipartFile.bytes)
+            FileConvertDTO(converterFile().file)
         }
-
-       val storeResult = storeFile {
+        val storeResult = storeFile {
            /** Change file extension from PDF to MP3 */
-           val newFilename = (multipartFile.originalFilename?.substringBeforeLast('.') ?: "filename") + ".mp3"
+           val newFilename = (converterFile().fileName.substringBeforeLast('.') ?: "filename") + ".mp3"
            FileUploadDTO(convertResult, newFilename, user)
         }
     }

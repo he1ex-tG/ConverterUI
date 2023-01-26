@@ -10,7 +10,7 @@
         <input type="file" th:field="*{file}" th:value="${file}">
         <button>Submit</button>
     </form>
-    <div th:object="${converterFile}">
+    <div>
         <div th:each="storedFile : *{storedFiles}">
             <a th:href="${storedFile.id}" th:text="${storedFile.filename}"></a>
         </div>

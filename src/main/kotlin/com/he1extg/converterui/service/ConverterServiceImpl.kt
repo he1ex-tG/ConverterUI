@@ -9,7 +9,6 @@ import com.he1extg.converterui.feign.ApiClient
 import com.he1extg.converterui.feign.DataClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
 
 @Service
 class ConverterServiceImpl : ConverterService {
@@ -28,25 +27,25 @@ class ConverterServiceImpl : ConverterService {
         return dataClient.getFileList(user)
     }
 
-    private fun convertFile(fileContent: ByteArray): ByteArray {
-        val fileConvertDTO = FileConvertDTO(fileContent)
-        val answerApi = apiClient.convertFile(fileConvertDTO)
-        return answerApi.content
+    private fun convertFile(fileConvertDTO: () -> FileConvertDTO): ByteArray {
+        return apiClient.convertFile(fileConvertDTO()).content
     }
 
-    private fun storeFile(userName: String, fileName: String, fileContent: ByteArray) {
-        val fileUploadDTO = FileUploadDTO(fileContent, fileName, userName)
-        dataClient.uploadFile(fileUploadDTO)
+    private fun storeFile(fileUploadDTO: () -> FileUploadDTO) {
+        dataClient.uploadFile(fileUploadDTO())
     }
 
     override fun processFile(converterFile: ConverterFile) {
         val multipartFile = converterFile.file ?: return // add validation on controller layer ?: return false
-        val convertResult = convertFile(multipartFile.bytes)
+        val convertResult = convertFile {
+            FileConvertDTO(multipartFile.bytes)
+        }
 
-        /** Change file extension from PDF to MP3 */
-        val newFilename = (multipartFile.originalFilename?.substringBeforeLast('.') ?: "filename") + ".mp3"
-
-        val storeResult = storeFile(user, newFilename, convertResult)
+       val storeResult = storeFile {
+           /** Change file extension from PDF to MP3 */
+           val newFilename = (multipartFile.originalFilename?.substringBeforeLast('.') ?: "filename") + ".mp3"
+           FileUploadDTO(convertResult, newFilename, user)
+        }
     }
 
     override fun downloadFile(id: Long): FilenameBytearrayDTO {

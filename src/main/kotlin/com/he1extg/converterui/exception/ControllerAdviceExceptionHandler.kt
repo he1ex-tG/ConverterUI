@@ -1,8 +1,8 @@
 package com.he1extg.converterui.exception
 
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @ControllerAdvice
 class ControllerAdviceExceptionHandler {
@@ -15,14 +15,14 @@ class ControllerAdviceExceptionHandler {
      * Custom exception handlers
      */
     @ExceptionHandler(ApiClientException::class)
-    fun handlerApiClientException(ex: ApiClientException, model: Model): String {
-        model.addAttribute(ex.apiError)
+    fun handlerApiClientException(ex: ApiClientException, redirectAttributes: RedirectAttributes): String {
+        redirectAttributes.addFlashAttribute(ex.apiError)
         return "redirect:/"
     }
 
     @ExceptionHandler(DataClientException::class)
-    fun handlerDataClientException(ex: DataClientException, model: Model): String {
-        model.addAttribute(ex.apiError)
+    fun handlerDataClientException(ex: DataClientException, redirectAttributes: RedirectAttributes): String {
+        redirectAttributes.addFlashAttribute(ex.apiError)
         return "redirect:/"
     }
 

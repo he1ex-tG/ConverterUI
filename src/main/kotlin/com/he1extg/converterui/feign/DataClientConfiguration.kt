@@ -24,7 +24,7 @@ class DataClientConfiguration {
                     .build()
             )
             val apiError = mapper.readValue(response.body().asInputStream(), ApiError::class.java)
-            DataClientException(apiError.debugMessage)
+            DataClientException(apiError)
         }
     }
 }

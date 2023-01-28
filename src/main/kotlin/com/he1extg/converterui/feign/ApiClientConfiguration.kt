@@ -24,7 +24,7 @@ class ApiClientConfiguration {
                     .build()
             )
             val apiError = mapper.readValue(response.body().asInputStream(), ApiError::class.java)
-            ApiClientException(apiError.debugMessage)
+            ApiClientException(apiError)
         }
     }
 }

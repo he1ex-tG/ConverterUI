@@ -6,14 +6,20 @@
 </head>
 <body>
     <h1>Converter: PDF to MP3 - UI</h1>
-    <form method="post" enctype="multipart/form-data" th:object="${converterFile}">
-        <input type="file" th:field="*{file}" th:value="${file}">
-        <button>Submit</button>
-    </form>
     <div>
-        <div th:each="storedFile : *{storedFiles}">
-            <a th:href="${storedFile.id}" th:text="${storedFile.filename}"></a>
+        <span th:if="${apiError}" th:text="${apiError.message}">Api error</span>
+    </div>
+    <form method="post" enctype="multipart/form-data" th:object="${converterFile}">
+        <div>
+            <input type="file" th:field="*{file}" th:value="${file}">
+            <span th:if="${#fields.hasErrors('file')}" th:errors="*{file}">File error</span>
         </div>
+        <div>
+            <button>Submit</button>
+        </div>
+    </form>
+    <div th:each="storedFile : ${storedFiles}">
+        <a th:href="${storedFile.id}" th:text="${storedFile.filename}"></a>
     </div>
 </body>
 </html>

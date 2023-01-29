@@ -1,6 +1,5 @@
 package com.he1extg.converterui.model
 
-import com.he1extg.converterui.dto.IdFilenameDTO
 import com.he1extg.converterui.exception.validation.MultipartFileConstraint
 import org.springframework.web.multipart.MultipartFile
 

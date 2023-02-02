@@ -4,4 +4,6 @@ import java.io.IOException
 
 class ApiClientException(
     val apiError: ApiError
-) : IOException(apiError.message)
+) : IOException(apiError.message) {
+    constructor(apiError: () -> ApiError) : this(apiError())
+}

@@ -5,8 +5,11 @@ import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.he1extg.converterui.exception.ApiError
 import com.he1extg.converterui.exception.DataClientException
+import feign.RetryableException
+import feign.Retryer
 import feign.codec.ErrorDecoder
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpStatus
 
 class DataClientConfiguration {
 
@@ -25,6 +28,28 @@ class DataClientConfiguration {
             )
             val apiError = mapper.readValue(response.body().asInputStream(), ApiError::class.java)
             DataClientException(apiError)
+        }
+    }
+
+    @Bean
+    fun retryer(): Retryer {
+        return object : Retryer {
+            override fun clone(): Retryer {
+                return this
+            }
+
+            override fun continueOrPropagate(e: RetryableException?) {
+                e?.let {
+                    throw DataClientException {
+                        val errorMessage = "Unable to get a response from service."
+                        ApiError(
+                            HttpStatus.SERVICE_UNAVAILABLE,
+                            errorMessage,
+                            e
+                        )
+                    }
+                }
+            }
         }
     }
 }

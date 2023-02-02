@@ -16,14 +16,13 @@ class ControllerAdviceExceptionHandler {
      */
     @ExceptionHandler(ApiClientException::class)
     fun handlerApiClientException(ex: ApiClientException, redirectAttributes: RedirectAttributes): String {
-        redirectAttributes.addFlashAttribute(ex.apiError)
+        redirectAttributes.addFlashAttribute("apiError", "ConverterAPI exception: ${ex.apiError.message}")
         return "redirect:/"
     }
 
     @ExceptionHandler(DataClientException::class)
     fun handlerDataClientException(ex: DataClientException, redirectAttributes: RedirectAttributes): String {
-        redirectAttributes.addFlashAttribute(ex.apiError)
+        redirectAttributes.addFlashAttribute("apiError", "ConverterData exception: ${ex.apiError.message}")
         return "redirect:/"
     }
-
 }

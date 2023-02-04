@@ -1,5 +1,6 @@
 package com.he1extg.converterui.exception
 
+import com.he1extg.converterui.dto.IdFilenameDTO
 import com.he1extg.converterui.exception.client.ClientException
 import com.he1extg.converterui.exception.client.ApiClientException
 import com.he1extg.converterui.exception.client.DataClientException
@@ -17,10 +18,17 @@ class ConverterExceptionHandler {
     /**
      * Custom exception handlers
      */
-    @ExceptionHandler(ClientException::class)
-    //@ExceptionHandler(ApiClientException::class, DataClientException::class)
+
+    @ExceptionHandler(ApiClientException::class)
     fun handlerApiClientException(ex: ClientException, redirectAttributes: RedirectAttributes): String {
         redirectAttributes.addFlashAttribute("apiError", ex)
+        return "redirect:/"
+    }
+
+    @ExceptionHandler(DataClientException::class)
+    fun handlerDataClientException(ex: ClientException, redirectAttributes: RedirectAttributes): String {
+        redirectAttributes.addFlashAttribute("apiError", ex)
+        redirectAttributes.addFlashAttribute("storedFiles", emptyList<IdFilenameDTO>())
         return "redirect:/"
     }
 }

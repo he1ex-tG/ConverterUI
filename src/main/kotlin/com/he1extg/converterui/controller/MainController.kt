@@ -2,7 +2,6 @@ package com.he1extg.converterui.controller
 
 import com.he1extg.converterui.dto.FilenameBytearrayDTO
 import com.he1extg.converterui.dto.IdFilenameDTO
-import com.he1extg.converterui.exception.client.DataClientException
 import com.he1extg.converterui.model.ConverterFile
 import com.he1extg.converterui.service.ConverterService
 import org.springframework.core.io.ByteArrayResource
@@ -32,14 +31,7 @@ class MainController(
 
     @ModelAttribute(name = "storedFiles")
     fun listStoredFiles(model: Model): List<IdFilenameDTO> {
-        return when(model.getAttribute("apiError")) {
-            is DataClientException -> {
-                listOf()
-            }
-            else -> {
-                converterService.getFileList()
-            }
-        }
+        return converterService.getFileList()
     }
 
     @GetMapping

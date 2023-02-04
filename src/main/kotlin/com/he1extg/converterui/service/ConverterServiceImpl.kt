@@ -1,23 +1,18 @@
 package com.he1extg.converterui.service
 
 import com.he1extg.converterui.dto.FileUploadDTO
-import com.he1extg.converterui.model.ConverterFile
 import com.he1extg.converterui.dto.FileConvertDTO
 import com.he1extg.converterui.dto.FilenameBytearrayDTO
 import com.he1extg.converterui.dto.IdFilenameDTO
 import com.he1extg.converterui.feign.ApiClient
 import com.he1extg.converterui.feign.DataClient
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
 
 @Service
-class ConverterServiceImpl : ConverterService {
-
-    @Autowired
-    lateinit var apiClient: ApiClient
-    @Autowired
-    lateinit var dataClient: DataClient
+class ConverterServiceImpl(
+    val apiClient: ApiClient,
+    val dataClient: DataClient
+) : ConverterService {
 
     /**
      * TODO Get user from security authentication
@@ -42,7 +37,7 @@ class ConverterServiceImpl : ConverterService {
         }
         val storeResult = storeFile {
            /** Change file extension from PDF to MP3 */
-           val newFilename = (converterFile().fileName.substringBeforeLast('.') ?: "filename") + ".mp3"
+           val newFilename = (converterFile().fileName.substringBeforeLast('.')) + ".mp3"
            FileUploadDTO(convertResult, newFilename, user)
         }
     }

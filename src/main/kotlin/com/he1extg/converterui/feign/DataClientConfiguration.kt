@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.he1extg.converterui.exception.ApiError
-import com.he1extg.converterui.exception.DataClientException
+import com.he1extg.converterui.exception.client.DataClientException
 import feign.RetryableException
 import feign.Retryer
 import feign.codec.ErrorDecoder
@@ -26,8 +26,9 @@ class DataClientConfiguration {
                     .configure(KotlinFeature.StrictNullChecks, false)
                     .build()
             )
-            val apiError = mapper.readValue(response.body().asInputStream(), ApiError::class.java)
-            DataClientException(apiError)
+            DataClientException{
+                mapper.readValue(response.body().asInputStream(), ApiError::class.java)
+            }
         }
     }
 

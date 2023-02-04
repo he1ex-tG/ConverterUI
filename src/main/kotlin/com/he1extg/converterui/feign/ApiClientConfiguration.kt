@@ -3,7 +3,7 @@ package com.he1extg.converterui.feign
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.he1extg.converterui.exception.ApiClientException
+import com.he1extg.converterui.exception.client.ApiClientException
 import com.he1extg.converterui.exception.ApiError
 import feign.RetryableException
 import feign.Retryer
@@ -26,8 +26,9 @@ class ApiClientConfiguration {
                     .configure(KotlinFeature.StrictNullChecks, false)
                     .build()
             )
-            val apiError = mapper.readValue(response.body().asInputStream(), ApiError::class.java)
-            ApiClientException(apiError)
+            ApiClientException{
+                mapper.readValue(response.body().asInputStream(), ApiError::class.java)
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.he1extg.converterui.exception.client.ApiClientException
 import com.he1extg.converterui.exception.ApiError
+import com.he1extg.converterui.exception.client.ApiClientRetryerException
 import feign.RetryableException
 import feign.Retryer
 import feign.codec.ErrorDecoder
@@ -41,7 +42,7 @@ class ApiClientConfiguration {
 
             override fun continueOrPropagate(e: RetryableException?) {
                 e?.let {
-                    throw ApiClientException {
+                    throw ApiClientRetryerException {
                         val errorMessage = "Unable to get a response from service."
                         ApiError(
                             HttpStatus.SERVICE_UNAVAILABLE,

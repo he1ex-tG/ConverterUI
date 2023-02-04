@@ -29,7 +29,7 @@ class ConverterFileTest {
 
         val answer = testRestTemplate.exchange(requestEntity, String::class.java)
 
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.FOUND)
     }
 
     /**
@@ -47,7 +47,7 @@ class ConverterFileTest {
 
         val answer = testRestTemplate.exchange(requestEntity, String::class.java)
 
-        assertThat(answer.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(answer.statusCode).isEqualTo(HttpStatus.FOUND)
     }
 
     /**

@@ -1,12 +1,11 @@
 package com.he1extg.converterui.service
 
-import com.he1extg.converterui.model.ConverterFile
-import org.assertj.core.api.Assertions.assertThat
+import com.he1extg.converterui.dto.FilenameBytearrayDTO
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.FileSystemResource
-import org.springframework.mock.web.MockMultipartFile
 
 @SpringBootTest
 class ConverterServiceTest {
@@ -16,26 +15,34 @@ class ConverterServiceTest {
 
     @Test
     fun `convertFile with empty TransferData`() {
-        val emptyConverterFile = ConverterFile()
-
-        val result = converterService.processFile(emptyConverterFile)
+        assertThrows<Throwable> {
+            converterService.processFile {
+                FilenameBytearrayDTO("", byteArrayOf())
+            }
+        }
     }
 
     @Test
     fun `convertFile with incorrect pdf file TransferData`() {
-        val converterFile = ConverterFile().apply {
-            file = MockMultipartFile("test.mp3", FileSystemResource("E:/test.mp3").inputStream.readBytes())
+        val resource = FileSystemResource("E:/test.mp3")
+        assertThrows<Throwable> {
+            converterService.processFile {
+                FilenameBytearrayDTO(
+                    resource.file.name,
+                    resource.file.readBytes()
+                )
+            }
         }
-
-        val result = converterService.processFile(converterFile)
     }
 
     @Test
     fun `convertFile with fill-full TransferData`() {
-        val converterFile = ConverterFile().apply {
-            file = MockMultipartFile("test.pdf", FileSystemResource("E:/test.pdf").inputStream.readBytes())
+        val resource = FileSystemResource("E:/test.pdf")
+        val result = converterService.processFile {
+            FilenameBytearrayDTO(
+                resource.file.name,
+                resource.file.readBytes()
+            )
         }
-
-        val result = converterService.processFile(converterFile)
     }
 }

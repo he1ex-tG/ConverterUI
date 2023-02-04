@@ -7,7 +7,7 @@
 <body>
     <h1>Converter: PDF to MP3 - UI</h1>
     <div>
-        <span th:if="${apiError}" th:text="${apiError}">Api error</span>
+        <span th:if="${apiError}" th:text="${apiError.class.simpleName} + ': ' + ${apiError.message}">Api error</span>
     </div>
     <form method="post" enctype="multipart/form-data" th:object="${converterFile}">
         <div>

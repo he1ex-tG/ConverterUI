@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
 class AuthenticationController(
@@ -24,8 +25,13 @@ class AuthenticationController(
     }
 
     @PostMapping("/registration")
-    fun postRegistration(username: String, password: String): String {
+    fun postRegistration(
+        username: String,
+        password: String,
+        redirectAttributes: RedirectAttributes
+    ): String {
         userDetailsService.addUser(User(username, passwordEncoder.encode(password)))
-        return "login"
+        redirectAttributes.addAttribute("username", username)
+        return "redirect:/login"
     }
 }

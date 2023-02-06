@@ -8,9 +8,15 @@
         <h1>Converter: PDF to MP3 - UI</h1>
         <form method="post" th:action="@{/login}">
             <div>
+                <div th:if="${param.error}">
+                    <span>Invalid username or password.</span>
+                </div>
+                <div th:if="${param.logout}">
+                    <span>You have been logged out.</span>
+                </div>
                 <div>
                     <label th:for="username">Username:</label>
-                    <input type="text" th:id="username" th:name="username">
+                    <input type="text" th:id="username" th:name="username" th:value="${param.username}">
                 </div>
                 <div>
                     <label th:for="password">Password:</label>

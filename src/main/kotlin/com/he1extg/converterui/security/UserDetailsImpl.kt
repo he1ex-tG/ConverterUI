@@ -2,11 +2,23 @@ package com.he1extg.converterui.security
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 
-class User(
+class UserDetailsImpl(
     private val _username: String,
-    private val _password: String,
+    private val _password: String
 ) : UserDetails {
+
+    private val passwordEncoder: PasswordEncoder
+        get() {
+            val idForEncode = "bcrypt"
+            val encoders: Map<String, PasswordEncoder> = mapOf(
+                idForEncode to BCryptPasswordEncoder(12)
+            )
+            return DelegatingPasswordEncoder(idForEncode, encoders)
+        }
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(
@@ -17,7 +29,7 @@ class User(
     }
 
     override fun getPassword(): String {
-        return _password
+        return passwordEncoder.encode(_password)
     }
 
     override fun getUsername(): String {

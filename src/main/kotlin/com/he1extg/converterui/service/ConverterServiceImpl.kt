@@ -6,6 +6,7 @@ import com.he1extg.converterui.dto.FilenameBytearrayDTO
 import com.he1extg.converterui.dto.IdFilenameDTO
 import com.he1extg.converterui.feign.ApiClient
 import com.he1extg.converterui.feign.DataClient
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,7 +18,8 @@ class ConverterServiceImpl(
     /**
      * TODO Get user from security authentication
      */
-    val user: String = "SuperUser"
+    val user: String
+        get() = SecurityContextHolder.getContext().authentication.name
 
     override fun getFileList(): List<IdFilenameDTO> {
         return dataClient.getFileList(user)

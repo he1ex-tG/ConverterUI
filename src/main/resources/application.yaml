@@ -10,4 +10,4 @@ feign:
     api:
       uri: http://localhost:8082/api/v1/file
     data:
-      uri: http://localhost:8081/api/v1/files
+      uri: http://localhost:8081/api/v1

@@ -8,6 +8,7 @@ import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
@@ -21,9 +22,15 @@ import javax.validation.Valid
 
 @Controller
 @SessionAttributes("converterFile")
-class MainController(
+class MainPageController(
     val converterService: ConverterService
 ) {
+
+    @ModelAttribute(name = "username")
+    fun getUsername(): String {
+        return SecurityContextHolder.getContext().authentication.name
+    }
+
     @ModelAttribute(name = "converterFile")
     fun converterFile(): ConverterFile {
         return ConverterFile()

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Converter: PDF to MP3 - UI</title>
+    </head>
+    <body>
+        <h1>Converter: PDF to MP3 - UI</h1>
+        <form method="post" th:action="@{/login}">
+            <div>
+                <div th:if="${param.error}">
+                    <span>Invalid username or password.</span>
+                </div>
+                <div th:if="${param.logout}">
+                    <span>You have been logged out.</span>
+                </div>
+                <div>
+                    <label th:for="username">Username:</label>
+                    <input type="text" th:id="username" th:name="username" th:value="${param.username}">
+                </div>
+                <div>
+                    <label th:for="password">Password:</label>
+                    <input type="text" th:id="password" th:name="password">
+                </div>
+            </div>
+            <div>
+                <button>Login</button>
+            </div>
+        </form>
+        <a th:href="@{/registration}" th:name="Registration">REGISTRATION</a>
+    </body>
+</html>

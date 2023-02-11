@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam
 )
 interface DataClient {
 
+    /**
+     * Files section
+     */
+
     @PostMapping("files/")
     fun uploadFile(fileUploadDTO: FileUploadDTO)
 
@@ -25,6 +29,10 @@ interface DataClient {
 
     @GetMapping("files/{id}")
     fun downloadFile(@PathVariable id: Long): FilenameBytearrayDTO
+
+    /**
+     * Users section
+     */
 
     @GetMapping("users/{username}")
     fun getUser(@PathVariable username: String): UsernamePasswordDTO

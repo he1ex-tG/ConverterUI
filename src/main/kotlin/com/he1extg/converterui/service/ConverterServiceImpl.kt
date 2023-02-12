@@ -39,7 +39,7 @@ class ConverterServiceImpl(
         }
         val storeResult = storeFile {
            /** Change file extension from PDF to MP3 */
-           val newFilename = (converterFile().fileName.substringBeforeLast('.')) + ".mp3"
+           val newFilename = (converterFile().filename.substringBeforeLast('.')) + ".mp3"
            FileUploadDTO(convertResult, newFilename, user)
         }
     }

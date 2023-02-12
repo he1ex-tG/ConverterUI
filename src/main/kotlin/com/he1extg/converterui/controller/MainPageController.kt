@@ -53,7 +53,7 @@ class MainPageController(
         val filenameBytearrayDTO = converterService.downloadFile(id)
         val resource = object : ByteArrayResource(filenameBytearrayDTO.file) {
             override fun getFilename(): String {
-                return filenameBytearrayDTO.fileName
+                return filenameBytearrayDTO.filename
             }
         }
         return ResponseEntity

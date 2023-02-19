@@ -1,9 +1,11 @@
 package com.he1extg.converterui.feign
 
-import com.he1extg.converterui.dto.FileUploadDTO
-import com.he1extg.converterui.dto.FilenameBytearrayDTO
-import com.he1extg.converterui.dto.IdFilenameDTO
-import com.he1extg.converterui.dto.UsernamePasswordDTO
+import com.he1extg.converterdata.dto.file.ContentDTO
+import com.he1extg.converterdata.dto.file.FileUploadDTO
+import com.he1extg.converterdata.dto.file.FilenameDTO
+import com.he1extg.converterdata.dto.user.AuthenticationDTO
+import com.he1extg.converterdata.dto.user.NewUserDTO
+import com.he1extg.converterdata.dto.user.UserDTO
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -25,18 +27,21 @@ interface DataClient {
     fun uploadFile(fileUploadDTO: FileUploadDTO)
 
     @GetMapping("files/")
-    fun getFileList(@RequestParam username: String): List<IdFilenameDTO>
+    fun getFileList(@RequestParam userId: Long): List<FilenameDTO>
 
     @GetMapping("files/{id}")
-    fun downloadFile(@PathVariable id: Long): FilenameBytearrayDTO
+    fun downloadFile(@PathVariable id: Long): ContentDTO
 
     /**
      * Users section
      */
 
     @GetMapping("users/{username}")
-    fun getUser(@PathVariable username: String): UsernamePasswordDTO
+    fun getUserAuthentication(@PathVariable username: String): AuthenticationDTO
+
+    @GetMapping("users/{username}")
+    fun getUser(@PathVariable username: String): UserDTO
 
     @PostMapping("users/")
-    fun addUser(usernamePasswordDTO: UsernamePasswordDTO)
+    fun addUser(newUserDTO: NewUserDTO)
 }

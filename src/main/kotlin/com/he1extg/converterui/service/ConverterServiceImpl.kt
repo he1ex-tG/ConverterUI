@@ -1,9 +1,9 @@
 package com.he1extg.converterui.service
 
-import com.he1extg.converterui.dto.FileUploadDTO
-import com.he1extg.converterui.dto.FileConvertDTO
-import com.he1extg.converterui.dto.FilenameBytearrayDTO
-import com.he1extg.converterui.dto.IdFilenameDTO
+import com.he1extg.converterui.dto.file.ContentDTO
+import com.he1extg.converterui.dto.file.FileUploadDTO
+import com.he1extg.converterui.dto.file.FilenameDTO
+import com.he1extg.converterui.dto.file.FileConvertDTO
 import com.he1extg.converterui.feign.ApiClient
 import com.he1extg.converterui.feign.DataClient
 import org.springframework.security.core.context.SecurityContextHolder
@@ -21,31 +21,31 @@ class ConverterServiceImpl(
     val user: String
         get() = SecurityContextHolder.getContext().authentication.name
 
-    override fun getFileList(): List<IdFilenameDTO> {
-        return dataClient.getFileList(user)
+    override fun getFileList(userId: Long): List<FilenameDTO> {
+        return dataClient.getFileList(userId)
     }
 
-    private fun convertFile(fileConvertDTO: () -> FileConvertDTO): ByteArray {
-        return apiClient.convertFile(fileConvertDTO()).content
+    private fun convertFile(block: () -> FileConvertDTO): ByteArray {
+        return apiClient.convertFile(block()).content
     }
 
-    private fun storeFile(fileUploadDTO: () -> FileUploadDTO) {
-        dataClient.uploadFile(fileUploadDTO())
+    private fun storeFile(block: () -> FileUploadDTO) {
+        dataClient.uploadFile(block())
     }
 
-    override fun processFile(converterFile: () -> FilenameBytearrayDTO) {
+    override fun processFile(block: () -> FileUploadDTO) {
         val convertResult = convertFile {
-            FileConvertDTO(converterFile().file)
+            FileConvertDTO(block().content)
         }
         val storeResult = storeFile {
            /** Change file extension from PDF to MP3 */
-           val newFilename = (converterFile().filename.substringBeforeLast('.')) + ".mp3"
-           FileUploadDTO(convertResult, newFilename, user)
+           val newFilename = (block().filename.substringBeforeLast('.')) + ".mp3"
+           FileUploadDTO(convertResult, newFilename, block().userId)
         }
     }
 
-    override fun downloadFile(id: Long): FilenameBytearrayDTO {
-        return dataClient.downloadFile(id)
+    override fun downloadFile(fileId: Long): ContentDTO {
+        return dataClient.downloadFile(fileId)
     }
 
 }

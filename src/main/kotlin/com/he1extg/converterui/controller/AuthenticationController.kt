@@ -1,7 +1,7 @@
 package com.he1extg.converterui.controller
 
-import com.he1extg.converterui.security.UserDetailsImpl
-import com.he1extg.converterui.security.UserDetailsServiceImpl
+import com.he1extg.converterui.dto.user.NewUserDTO
+import com.he1extg.converterui.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
 class AuthenticationController(
-    private val userDetailsService: UserDetailsServiceImpl
+    private val userService: UserService
 ) {
 
     @GetMapping("/login")
@@ -28,8 +28,10 @@ class AuthenticationController(
         password: String,
         redirectAttributes: RedirectAttributes
     ): String {
-        userDetailsService.addUser(UserDetailsImpl(username, password))
-        redirectAttributes.addAttribute("username", username)
+        val userDTO = userService.addUser {
+            NewUserDTO(username, password)
+        }
+        redirectAttributes.addAttribute("username", userDTO.username)
         return "redirect:/login"
     }
 }

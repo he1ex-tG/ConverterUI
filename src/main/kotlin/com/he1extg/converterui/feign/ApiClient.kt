@@ -1,6 +1,6 @@
 package com.he1extg.converterui.feign
 
-import com.he1extg.converterui.dto.FileConvertDTO
+import com.he1extg.converterui.dto.file.FileConvertDTO
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.PostMapping
 

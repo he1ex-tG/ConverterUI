@@ -5,7 +5,11 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class UserDetailsImpl(
     private val _username: String,
-    private val _password: String
+    private val _password: String,
+    private val _accountNonExpired: Boolean,
+    private val _accountNonLocked: Boolean,
+    private val _credentialsNonExpired: Boolean,
+    private val _enabled: Boolean
 ) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
@@ -25,18 +29,18 @@ class UserDetailsImpl(
     }
 
     override fun isAccountNonExpired(): Boolean {
-        return true
+        return _accountNonExpired
     }
 
     override fun isAccountNonLocked(): Boolean {
-        return true
+        return _accountNonLocked
     }
 
     override fun isCredentialsNonExpired(): Boolean {
-        return true
+        return _credentialsNonExpired
     }
 
     override fun isEnabled(): Boolean {
-        return true
+        return _enabled
     }
 }

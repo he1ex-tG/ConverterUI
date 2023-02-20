@@ -1,4 +1,4 @@
-package com.he1extg.converterdata.dto.file
+package com.he1extg.converterui.dto.file
 
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank

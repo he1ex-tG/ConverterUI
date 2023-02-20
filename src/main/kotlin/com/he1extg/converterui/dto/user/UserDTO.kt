@@ -1,4 +1,4 @@
-package com.he1extg.converterdata.dto.user
+package com.he1extg.converterui.dto.user
 
 class UserDTO(
     val id: Long,

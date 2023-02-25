@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Converter: PDF to MP3 - Error</title>
+    </head>
+    <body>
+        <h1>Converter: PDF to MP3 - Error</h1>
+        <div>
+            <span th:if="${apiError}" th:text="${apiError.class.simpleName} + ': ' + ${apiError.message}">Api error</span>
+        </div>
+        <div>
+            <a th:href="@{/}" th:text="'Main page'">MAIN PAGE</a>
+        </div>
+    </body>
+</html>

@@ -6,15 +6,15 @@
     </head>
     <body>
         <h1>Converter: PDF to MP3 - UI</h1>
-        <form method="post" th:action="@{/registration}">
+        <form method="post" th:action="@{/registration}" th:object="${userRegistration}">
             <div>
                 <div>
                     <label th:for="username">Username:</label>
-                    <input type="text" th:id="username" th:name="username">
+                    <input type="text" th:id="username" th:field="*{username}">
                 </div>
                 <div>
                     <label th:for="password">Password:</label>
-                    <input type="text" th:id="password" th:name="password">
+                    <input type="text" th:id="password" th:field="*{password}">
                 </div>
             </div>
             <div>

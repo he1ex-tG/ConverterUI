@@ -5,4 +5,7 @@ import java.io.IOException
 
 abstract class ClientException(
     apiError: () -> ApiError
-) : IOException(apiError().message)
+) : IOException() {
+
+    override val message = apiError().message
+}
